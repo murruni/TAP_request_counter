@@ -1,0 +1,26 @@
+{
+  "name": "tap_request_counter",
+  "version": "1.0.0",
+  "description": "Request counter",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murruni/TAP_request_counter.git"
+  },
+  "author": "murruni@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/murruni/TAP_request_counter/issues"
+  },
+  "homepage": "https://github.com/murruni/TAP_request_counter#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "mongodb": "^3.3.3",
+    "mongoose": "^5.7.7"
+  }
+}
