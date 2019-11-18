@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const user_controller = require('../controllers/user.controller');
+const user_controller = require('../controllers/user');
 /**
  * retorna todos los usuarios * 
  */
-router.get('/', user_controller.getAll);
+router.get('/user', user_controller.getAll);
 
 /**
  * retorna el usuario _id x
  */
-router.get('/:id', user_controller.get);
+router.get('/user/:id', user_controller.get);
 
 /**
  * crea o actualiza un user X con la cuota Y de registros que puede solicitar 
@@ -20,6 +20,6 @@ router.get('/:id', user_controller.get);
  *  401 si no tiene permisos para proceder
  * POST /users/X en el body { 'quota' : Y. 'seconds' : Z }
  */
-router.post('/:id', user_controller.set);
+router.post('/user/:id', user_controller.set);
 
 module.exports = router;

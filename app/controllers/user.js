@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const myMiddlewares = require('../utils/middleware');
+const ErrorHandler = require('../utils/error');
 
 exports.getAll = (req, res, next) => {
     User.find({}, function (err, users) {
