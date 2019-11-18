@@ -6,6 +6,23 @@ const COUNTER_PATH = '/count'
 
 var request = require('request');
 
+// solo obtengo el nombre de usuario del token
+exports.getTokenUser = function (req) {
+    var options = {
+        url: GATEWAY_URL + TOKEN_PATH
+        , headers: { 'Authorization': (req.headers.authorization || '') }
+    };
+
+    function callback(error, response, body) {
+        if (error) return next(new ErrorHandler(500, 'Error de conexión al validador de usuarios'));
+        if (response.statusCode == 200) return JSON.parse(body);
+        if (response.statusCode == 401) return next(new ErrorHandler(401, (JSON.parse(body).error || '')));
+        if (response.statusCode == 503) return next(new ErrorHandler(500, 'Error de conexión al validador de usuarios'));
+        return next(new ErrorHandler(500, 'Error no especificado'));
+    }
+    request(options, callback);
+};
+
 // middleware validacion de token
 exports.validarToken = function (req, res, next) {
     var options = {
@@ -32,7 +49,7 @@ exports.contadorRequest = function (req, res, next) {
         , headers: { 'Authorization': (req.headers.authorization || '') }
     };
 
-    function callback(error, response, body) {
+    function callback(error, response, body) {        
         if (error) return next(new ErrorHandler(500, 'Error de conexión al contador de request'));
         if (response.statusCode == 200) return next();
         if (response.statusCode == 400) return next(new ErrorHandler(400, JSON.parse(body).error));

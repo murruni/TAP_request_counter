@@ -1,4 +1,4 @@
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3002;
 const MONGO_URL = process.env.MONGO_URL || 'clustermongodb-1sv33.mongodb.net';
 const MONGO_DB = process.env.MONGO_DB || 'up_tap';
 const MONGO_USR = process.env.MONGO_USR || 'up_tap_veraz';

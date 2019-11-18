@@ -1,65 +1,28 @@
+const GATEWAY_PORT = process.env.GATEWAY_PORT || 3000;
+const GATEWAY_HOST = process.env.GATEWAY_HOST || 'localhost';
+const GATEWAY_URL = 'http://' + GATEWAY_HOST + ':' + GATEWAY_PORT;
+const request = require('request');
+
 const User = require('../models/user');
-const myMiddlewares = require('../utils/middleware');
 const ErrorHandler = require('../utils/error');
+const castErr = function (err) {
+    if (err.name == 'CastError' && err.kind == 'ObjectId')
+        return new ErrorHandler(503, 'Servicio de base de datos no disponible');
+    return err;
+};
 
 exports.getAll = (req, res, next) => {
-    User.find({}, function (err, users) {
-        if (err) {
-            if (err.name == 'CastError' && err.kind == 'ObjectId') {
-                res.status(503).send('Service Unavailable');
-            }
-            return next(err);
-        }
-        res.send(users);
+    User.find({}, '-_id user quota seconds', function (err, data) {
+        if (err) return next(castErr(err));
+        if (data) res.status(200).send(data);
+        res.status(200).send({ error: 'No hay datos' });
     });
 };
 
 exports.get = (req, res, next) => {
-    let id = getUrlIdField(req);
-    User.findById(id, function (err, usr) {
-        if (err) {
-            if (err.name == 'CastError' && err.kind == 'ObjectId') {
-                res.status(404).send('Not user found');
-            }
-            return next(err);
-        }
-        res.send(usr);
+    User.findOne({ user: req.params.user }, '-_id user quota seconds', function (err, data) {
+        if (err) return next(castErr(err));
+        if (data) return res.status(200).send(data);
+        res.status(200).send({ error: 'No hay datos' });
     });
 };
-
-exports.count = (req, res, next) => {
-    /*
-    User.find({}, function (err, users) {
-        if (err) {
-            if (err.name == 'CastError' && err.kind == 'ObjectId') {
-                res.status(503).send('Service Unavailable');
-            }
-            return next(err);
-        }
-        res.send(users);
-    });
-    */
-};
-
-exports.set = (req, res, next) => {
-
-};
-
-
-// -------------------------------------------------------------------
-/** @returns User */
-function getBodyUser(req) {
-    var user = new User();
-    /** @todo desconfiar de los datos */
-    if (req.body.user) user.user = req.body.user;
-    if (req.body.pass) user.pass = req.body.pass;
-    if (req.body.email) user.email = req.body.email;
-    if (req.body.houses) user.houses = req.body.houses;
-    return user;
-}
-
-/** @returns id field */
-function getUrlIdField(req) {
-    /** @todo desconfiar de los datos */
-    return req.params.id;
-}

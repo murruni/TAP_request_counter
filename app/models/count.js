@@ -2,12 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CountSchema = Schema({
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User'
-    },
+    user: String,
     count: Number, 
-    timestamp: { type: Date, default: Date.now }
+    timestamp: Number
 });
 
 module.exports = mongoose.model('Count', CountSchema);
