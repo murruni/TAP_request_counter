@@ -28,7 +28,7 @@ exports.count = (req, res, next) => {
             var now = Date.now();
             u.user = JSON.parse(body).sub;
             var limTime = Date.now();
-            
+
             // MongoDB
             User.findOne({ 'user': u.user }, function (err, data) {
                 if (err) return next(castErr(err));
@@ -42,7 +42,9 @@ exports.count = (req, res, next) => {
                     $group: { _id: "$user", total: { $sum: "$count" } }
                 }]).exec(function (err, data) {
                     if (err) return next(castErr(err));
-                    var acum = data ? (data[0]).total : 0;
+                    var acum = 0;
+                    if (data && data[0] && (data[0]).total)
+                        acum = (data[0]).total;
 
                     if (userFound.quota >= (acum + cantReq)) {
                         // puede, agrego registro de solicitud
