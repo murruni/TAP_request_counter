@@ -45,8 +45,6 @@ exports.count = (req, res, next) => {
                     var acum = 0;
                     if (data && data[0] && (data[0]).total)
                         acum = parseInt((data[0]).total);
-console.log((userFound.quota >= (acum + cantReq))) 
-console.log(`${userFound.quota} ${acum} ${cantReq} ${(acum + cantReq)}`)
                     if (parseInt(userFound.quota) >= parseInt(acum + cantReq)) {
                         // puede, agrego registro de solicitud
                         var c = new Count();
