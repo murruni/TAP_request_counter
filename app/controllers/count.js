@@ -14,7 +14,7 @@ const castErr = function (err) {
 };
 
 exports.count = (req, res, next) => {
-    const cantReq = req.params.cant;
+    const cantReq = parseInt(req.params.cant);
 
     var options = {
         url: GATEWAY_URL + TOKEN_PATH
@@ -44,7 +44,7 @@ exports.count = (req, res, next) => {
                     if (err) return next(castErr(err));
                     var acum = 0;
                     if (data && data[0] && (data[0]).total)
-                        acum = (data[0]).total;
+                        acum = parseInt((data[0]).total);
 
                     if (userFound.quota >= (acum + cantReq)) {
                         // puede, agrego registro de solicitud
